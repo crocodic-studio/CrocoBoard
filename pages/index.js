@@ -34,7 +34,7 @@ export default function Home() {
                 contributors.map((contributor, contributorIndex) => (
                   <Contributor
                     contributorIndex = {contributorIndex}
-                    opacity = {hoveringAtIndex == '' || hoveringAtIndex == contributorIndex ? 1 : 0.3}
+                    isFocused = {hoveringAtIndex == '' || hoveringAtIndex == contributorIndex}
                     onMouseEnter={() => setHoveringAtIndex(contributorIndex.toString())}
                     onMouseLeave={() => setHoveringAtIndex('')}
                   />
@@ -49,9 +49,9 @@ export default function Home() {
 }
 
 function Contributor(props) {
-  const { contributorIndex, onMouseEnter, onMouseLeave, opacity } = props
+  const { contributorIndex, isFocused, onMouseEnter, onMouseLeave } = props
 
-  const animation = useSpring({ opacity: opacity == 1 ? 1.0 : 0.2, config: {duration: 500}, from: { opacity: opacity == 1 ? 0.2 : 1 } })
+  const animation = useSpring({ opacity: isFocused ? 1.0 : 0.2, config: {duration: 500}, from: { opacity: isFocused ? 0.2 : 1 } })
 
   return (
     <animated.a
