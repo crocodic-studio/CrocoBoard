@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import Head from 'next/head'
 import { useSpring, animated } from 'react-spring'
+import Switch from "react-switch"
 
 import styles from '../styles/Home.module.css'
 
@@ -52,13 +53,19 @@ export default function Home() {
     },
   ])
   const [hoveringAtId, setHoveringAtId] = useState('')
-
   const [search, setSearch] = useState('')
+  const [isShowOnlyUnassignedContributor, setIsShowOnlyUnassignedContributor] = useState(false)
 
   const filteredContributors = contributors.filter(contributor => {
     return (
-      contributor.name.trim().toLowerCase().includes(search.trim().toLowerCase())
-      || contributor.tag.trim().toLowerCase().includes(search.trim().toLowerCase())
+      (
+        contributor.name.trim().toLowerCase().includes(search.trim().toLowerCase())
+        || contributor.tag.trim().toLowerCase().includes(search.trim().toLowerCase())
+      )
+      && (
+        !isShowOnlyUnassignedContributor
+        || contributor.taskLevel == 0
+      )
     )
   })
   
@@ -122,15 +129,38 @@ export default function Home() {
           </div>
 
           <div
-            style = {{
+            style={{
+              alignItems: 'center',
               position: 'fixed',
+              display: 'flex',
               bottom: 0,
-              backgroundColor: 'gray',
+              backgroundColor: 'dimgray',
               height: 60,
-              width: '100%'
+              width: '100%',
+              paddingLeft: 20,
+              paddingRight: 20
             }}
           >
-            
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
+            >
+              <Switch
+                onChange={setIsShowOnlyUnassignedContributor}
+                checked={isShowOnlyUnassignedContributor}
+              />
+
+              <div
+                style={{
+                  color: 'white',
+                  marginLeft: 10
+                }}
+              >
+                Show Unassigned Only
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -187,6 +217,7 @@ function Contributor(props) {
           ['', '', '', '', '', '', '', ''].map((item, index) => (
             <div
               className={styles.progressBarItem}
+              key={contributor.id + ' task level - ' + index}
               style={{
                 backgroundColor: contributor.taskLevel > index ? taskLevelBackgroundColor : 'rgba(255, 255, 255, 0.2)',
                 marginLeft: index == 0 ? 0 : 7.5

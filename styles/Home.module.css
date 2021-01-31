@@ -57,6 +57,7 @@
 .contributorsListInnerContainer {
   display: flex;
   overflow-x: scroll;
+  padding-top: 20px;
   padding-bottom: 20px;
 }
 
@@ -68,6 +69,7 @@
 .contributor {
   align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -76,6 +78,7 @@
 
 .contributor:hover {
   background-color: rgba(255, 215, 0, 0.2);
+  border: 2px solid white;
 }
 
 .contributorPhoto {
