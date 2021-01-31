@@ -253,18 +253,28 @@ function Contributor(props) {
 
       <div className={styles.progressBarContainer}>
         {
-          ['', '', '', '', '', '', '', ''].map((item, index) => (
+          contributor.taskLevel > 8 ?
             <div
               className={styles.progressBarItem}
-              key={contributor.id + ' task level - ' + index}
               style={{
-                backgroundColor: contributor.taskLevel > index ? taskLevelBackgroundColor : 'rgba(255, 255, 255, 0.2)',
-                marginLeft: index == 0 ? 0 : 7.5
+                backgroundColor: 'maroon'
               }}
             >
-              {index + 1}
+              {contributor.taskLevel}
             </div>
-          ))
+            :
+            ['', '', '', '', '', '', '', ''].map((item, index) => (
+              <div
+                className={styles.progressBarItem}
+                key={contributor.id + ' task level - ' + index}
+                style={{
+                  backgroundColor: contributor.taskLevel > index ? taskLevelBackgroundColor : 'rgba(255, 255, 255, 0.2)',
+                  marginLeft: index == 0 ? 0 : 7.5
+                }}
+              >
+                {index + 1}
+              </div>
+            ))
         }
       </div>
 
