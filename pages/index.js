@@ -133,18 +133,22 @@ export default function Home() {
               alignItems: 'center',
               position: 'fixed',
               display: 'flex',
+              flexWrap: 'wrap',
               bottom: 0,
-              backgroundColor: 'dimgray',
-              height: 60,
+              backgroundColor: 'rgb(40, 40, 40)',
+              height: 100,
               width: '100%',
               paddingLeft: 20,
-              paddingRight: 20
+              paddingRight: 20,
+              justifyContent: 'space-around'
             }}
           >
             <div
               style={{
                 alignItems: 'center',
-                display: 'flex'
+                display: 'flex',
+                marginLeft: 10,
+                marginRight: 10,
               }}
             >
               <Switch
@@ -155,12 +159,29 @@ export default function Home() {
               <div
                 style={{
                   color: 'white',
+                  fontSize: 14,
                   marginLeft: 10
                 }}
               >
                 Show Unassigned Only
               </div>
             </div>
+
+            <a
+              href='#'
+              style={{
+                backgroundColor: 'green',
+                borderRadius: 10,
+                color: 'white',
+                fontSize: 14,
+                fontWeight: 'bold',
+                marginLeft: 10,
+                marginRight: 10,
+                padding: 10
+              }}
+            >
+              Notify All Unassigned Contributors
+            </a>
           </div>
         </div>
       </main>
