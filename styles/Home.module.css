@@ -122,3 +122,18 @@
   padding-left: 7px;
   padding-right: 7px;
 }
+
+.selectedContributorName {
+  color: white;
+  margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.optionsContainer {
+  display: flex;
+  max-width: 400px;
+  overflow-x: scroll;
+  padding-bottom: 400px;
+  margin-bottom: -400px;
+  width: 100%;
+}

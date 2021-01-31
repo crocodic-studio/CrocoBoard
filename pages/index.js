@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import { useSpring, animated } from 'react-spring'
 import Switch from "react-switch"
+import Select from "react-dropdown-select"
 
 import styles from '../styles/Home.module.css'
 
@@ -19,6 +20,10 @@ const tags = [
     name: 'Web',
     color: 'rgb(197, 114, 12)'
   }
+]
+
+const options = [
+  'TOI', 'Erela Customer', 'Tirai ATM', 'MPM', 'EzFit', 'Angkasa Pura'
 ]
 
 export default function Home() {
@@ -55,6 +60,7 @@ export default function Home() {
   const [hoveringAtId, setHoveringAtId] = useState('')
   const [search, setSearch] = useState('')
   const [isShowOnlyUnassignedContributor, setIsShowOnlyUnassignedContributor] = useState(false)
+  const [selectedContributor, setSelectedContributor] = useState(null)
 
   const filteredContributors = contributors.filter(contributor => {
     return (
@@ -118,6 +124,7 @@ export default function Home() {
                         isFocused={hoveringAtId == '' || hoveringAtId == contributor.id.toString()}
                         onMouseEnter={() => setHoveringAtId(contributor.id.toString())}
                         onMouseLeave={() => setHoveringAtId('')}
+                        onClick={() => setSelectedContributor(contributor)}
                       />
                     </div>
                   </div>
@@ -184,13 +191,23 @@ export default function Home() {
             </a>
           </div>
         </div>
+
+        {
+          selectedContributor != undefined ?
+            <ContributorDetailModal
+              contributor={selectedContributor}
+              onCloseModal={() => setSelectedContributor(null)}
+            />
+            :
+            null
+        }
       </main>
     </>
   )
 }
 
 function Contributor(props) {
-  const { contributor, isFocused, onMouseEnter, onMouseLeave } = props
+  const { contributor, isFocused, onMouseEnter, onMouseLeave, onClick } = props
 
   const animation = useSpring({ opacity: isFocused ? 1.0 : 0.2, config: {duration: 500}, from: { opacity: isFocused ? 0.2 : 1 } })
 
@@ -224,6 +241,7 @@ function Contributor(props) {
       href='/#'
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onClick={onClick}
       style={{
         opacity: animation.opacity
       }}
@@ -263,5 +281,208 @@ function Contributor(props) {
         {contributor.tag}
       </div>
     </animated.a>
+  )
+}
+
+function ContributorDetailModal(props) {
+  const { contributor, onCloseModal } = props
+
+  function getTagBackgroundColor() {
+    let backgroundColor = '#00ADB5'
+
+    for(const tag of tags) {
+      if(contributor.tag == tag.name) {
+        backgroundColor = tag.color
+
+        break
+      }
+    }
+
+    return backgroundColor
+  }
+
+  return (
+    <div
+      style={{
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        justifyContent: 'center',
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 2,
+        overflow: 'hidden'
+      }}
+    >
+      <div
+        style = {{
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          left: 0,
+          zIndex: -1
+        }}
+      />
+
+      <div>
+        <div
+          style={{
+            borderRadius: 5,
+            display: 'flex',
+            backgroundColor: 'rgb(40, 40, 40)',
+            overflow: 'hidden'
+          }}
+        >
+          <img
+            src={contributor.imageUrl}
+            style={{
+              objectFit: 'cover'
+            }}
+            height={300}
+            width={300}
+          />
+
+          <div
+            style={{
+              padding: 20,
+              width: 300
+            }}
+          >
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'space-between'
+              }}
+            >
+              <h2 className={styles.selectedContributorName}>
+                {contributor.name}
+              </h2>
+
+              <div
+                className={styles.contributorTag}
+                style={{
+                  backgroundColor: getTagBackgroundColor()
+                }}
+              >
+                {contributor.tag}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            alignItems: 'flex-start',
+            display: 'flex',
+            marginTop: 20
+          }}
+        >
+          <div className={styles.optionsContainer}>
+            {
+              ['', '', '', '', ''].map((item, index) => (
+                <div
+                  style={{
+                    marginLeft: index == 0 ? 0 : 20
+                  }}
+                >
+                  <Select
+                    placeholder='Project Name'
+                    disabled = {false}
+                    key={index}
+                    options={options.map(label => ({label}))}
+                    onChange={(values) => {}}
+                    style={{
+                      backgroundColor: 'rgb(200, 200, 200)',
+                      width: 200
+                    }}
+                  />
+
+                  <input
+                    placeholder='Level'
+                    style={{
+                      backgroundColor: 'rgb(200, 200, 200)',
+                      height: 40,
+                      fontSize: 16,
+                      marginTop: 10,
+                      width: '100%',
+                      paddingLeft: 5
+                    }}
+                  />
+
+                  <input
+                    placeholder='Keterangan'
+                    style={{
+                      backgroundColor: 'rgb(200, 200, 200)',
+                      height: 40,
+                      fontSize: 16,
+                      marginTop: 10,
+                      width: '100%',
+                      paddingLeft: 5
+                    }}
+                  />
+                </div>
+              ))
+            }
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              width: 180,
+              marginLeft: 20
+            }}
+          >
+            <a
+              href='#'
+              style={{
+                borderRadius: 5,
+                backgroundColor: 'deepskyblue',
+                color: 'white',
+                padding: 10,
+                textAlign: 'center'
+              }}
+            >
+              Copy From Previous
+            </a>
+
+            <a
+              href='#'
+              style={{
+                borderRadius: 5,
+                backgroundColor: 'crimson',
+                color: 'white',
+                padding: 10,
+                textAlign: 'center',
+                marginTop: 10
+              }}
+            >
+              Reset
+            </a>
+
+            <a
+              href='#'
+              style={{
+                borderRadius: 5,
+                backgroundColor: 'green',
+                color: 'white',
+                padding: 10,
+                textAlign: 'center',
+                marginTop: 10
+              }}
+            >
+              Apply
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
